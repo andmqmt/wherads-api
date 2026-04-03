@@ -1,9 +1,9 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { UserEntity } from '../../../domain/entities/user.entity';
-import { UserRepository } from '../../../domain/repositories/user.repository';
-import { LoginUseCase } from '../login.use-case';
+import { UserEntity } from '../../../domain/entities/user.entity.js';
+import { UserRepository } from '../../../domain/repositories/user.repository.js';
+import { LoginUseCase } from '../login.use-case.js';
 
 describe('LoginUseCase', () => {
   let useCase: LoginUseCase;

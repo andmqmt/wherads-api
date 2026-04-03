@@ -1,8 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserEntity } from '../../../domain/entities/user.entity';
-import { UserRepository } from '../../../domain/repositories/user.repository';
-import { RegisterUseCase } from '../register.use-case';
+import { UserEntity } from '../../../domain/entities/user.entity.js';
+import { UserRepository } from '../../../domain/repositories/user.repository.js';
+import { RegisterUseCase } from '../register.use-case.js';
 
 describe('RegisterUseCase', () => {
   let useCase: RegisterUseCase;

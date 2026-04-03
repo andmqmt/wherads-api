@@ -1,7 +1,7 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { CampaignEntity } from '../../../domain/entities/campaign.entity';
-import { CampaignRepository } from '../../../domain/repositories/campaign.repository';
-import { DeleteCampaignUseCase } from '../delete-campaign.use-case';
+import { CampaignEntity } from '../../../domain/entities/campaign.entity.js';
+import { CampaignRepository } from '../../../domain/repositories/campaign.repository.js';
+import { DeleteCampaignUseCase } from '../delete-campaign.use-case.js';
 
 describe('DeleteCampaignUseCase', () => {
   let useCase: DeleteCampaignUseCase;

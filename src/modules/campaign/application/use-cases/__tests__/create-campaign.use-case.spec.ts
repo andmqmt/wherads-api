@@ -1,6 +1,6 @@
-import { CampaignEntity } from '../../../domain/entities/campaign.entity';
-import { CampaignRepository } from '../../../domain/repositories/campaign.repository';
-import { CreateCampaignUseCase } from '../create-campaign.use-case';
+import { CampaignEntity } from '../../../domain/entities/campaign.entity.js';
+import { CampaignRepository } from '../../../domain/repositories/campaign.repository.js';
+import { CreateCampaignUseCase } from '../create-campaign.use-case.js';
 
 describe('CreateCampaignUseCase', () => {
   let useCase: CreateCampaignUseCase;
