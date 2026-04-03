@@ -28,8 +28,12 @@ src/
     │   ├── application/ # Use cases, DTOs e testes unitários
     │   ├── infrastructure/ # Implementações de repositório (Prisma)
     │   └── presentation/   # Controllers, guards e strategies
-    └── campaign/        # Módulo de campanhas (CRUD)
-        ├── domain/
+    ├── campaign/        # Módulo de campanhas (CRUD)
+    │   ├── domain/
+    │   ├── application/
+    │   ├── infrastructure/
+    │   └── presentation/
+    └── ai/              # Módulo de IA (Gemini)
         ├── application/
         ├── infrastructure/
         └── presentation/
@@ -43,6 +47,7 @@ src/
 - **Logging** — Interceptor que loga tempo de resposta + filtro global de exceções
 - **Seed** — Dados iniciais (admin@wherads.com / 123456 + 5 campanhas)
 - **Validação** — DTOs validados automaticamente com class-validator
+- **IA (Gemini)** — Geração de descrições e análise de KPIs via Google Gemini
 - **Swagger** — Documentação completa em `/api/docs`
 
 ## Como rodar localmente
@@ -109,6 +114,7 @@ docker run -p 3001:3001 --env-file .env wherads-api
 | `@nestjs/jwt` | Geração e verificação de tokens JWT para autenticação |
 | `@nestjs/passport`, `passport`, `passport-jwt` | Integração do Passport como guard do NestJS para estratégia JWT |
 | `@nestjs/cache-manager`, `cache-manager` | Cache em memória com TTL para endpoints de listagem |
+| `@google/generative-ai` | SDK do Google Gemini para geração de texto com IA |
 | `@prisma/client`, `@prisma/adapter-pg`, `prisma` | ORM type-safe com adapter pattern (v7) para PostgreSQL |
 | `pg` | Driver PostgreSQL nativo (usado pelo adapter do Prisma v7) |
 | `bcryptjs` | Hash de senhas com bcrypt (versão JS pura, sem compilação nativa) |
@@ -120,7 +126,8 @@ docker run -p 3001:3001 --env-file .env wherads-api
 
 | Pacote | Justificativa |
 |--------|---------------|
-| `typescript`, `ts-node`, `ts-jest`, `ts-loader`, `tsconfig-paths` | Compilação, execução e resolução de paths TypeScript |
+| `typescript`, `ts-node`, `tsconfig-paths` | Compilação, execução e resolução de paths TypeScript |
+| `@swc/core`, `@swc/jest` | Transpilação rápida para testes (compatível com ESM) |
 | `eslint`, `typescript-eslint`, `eslint-config-prettier`, `eslint-plugin-prettier` | Linting com regras TypeScript e integração com Prettier |
 | `prettier` | Formatação automática de código |
 | `husky` | Git hooks para validação pré-commit e pré-push |
