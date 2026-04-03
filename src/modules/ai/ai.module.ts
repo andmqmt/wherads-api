@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module.js';
+import { DesignCampaignUseCase } from './application/use-cases/design-campaign.use-case.js';
 import { GenerateDescriptionUseCase } from './application/use-cases/generate-description.use-case.js';
 import { GenerateInsightsUseCase } from './application/use-cases/generate-insights.use-case.js';
 import { GenerateSummaryUseCase } from './application/use-cases/generate-summary.use-case.js';
@@ -14,6 +15,7 @@ import { AiController } from './presentation/controllers/ai.controller.js';
     GenerateInsightsUseCase,
     GenerateDescriptionUseCase,
     GenerateSummaryUseCase,
+    DesignCampaignUseCase,
   ],
 })
 export class AiModule {}

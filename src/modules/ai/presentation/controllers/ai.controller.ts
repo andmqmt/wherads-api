@@ -6,9 +6,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../auth/presentation/guards/jwt-auth.guard.js';
+import { DesignCampaignDto } from '../../application/dtos/design-campaign.dto.js';
 import { GenerateDescriptionDto } from '../../application/dtos/generate-description.dto.js';
 import { GenerateInsightsDto } from '../../application/dtos/generate-insights.dto.js';
 import { GenerateSummaryDto } from '../../application/dtos/generate-summary.dto.js';
+import { DesignCampaignUseCase } from '../../application/use-cases/design-campaign.use-case.js';
 import { GenerateDescriptionUseCase } from '../../application/use-cases/generate-description.use-case.js';
 import { GenerateInsightsUseCase } from '../../application/use-cases/generate-insights.use-case.js';
 import { GenerateSummaryUseCase } from '../../application/use-cases/generate-summary.use-case.js';
@@ -23,6 +25,7 @@ export class AiController {
     private readonly generateInsightsUseCase: GenerateInsightsUseCase,
     private readonly generateDescriptionUseCase: GenerateDescriptionUseCase,
     private readonly generateSummaryUseCase: GenerateSummaryUseCase,
+    private readonly designCampaignUseCase: DesignCampaignUseCase,
     private readonly geminiService: GeminiService,
   ) {}
 
@@ -55,5 +58,13 @@ export class AiController {
   @ApiResponse({ status: 503, description: 'Serviço de IA indisponível' })
   async generateSummary(@Body() dto: GenerateSummaryDto) {
     return this.generateSummaryUseCase.execute(dto);
+  }
+
+  @Post('design-campaign')
+  @ApiOperation({ summary: 'Gerar plano estratégico de campanha com IA' })
+  @ApiResponse({ status: 200, description: 'Plano gerado com sucesso' })
+  @ApiResponse({ status: 503, description: 'Serviço de IA indisponível' })
+  async designCampaign(@Body() dto: DesignCampaignDto) {
+    return this.designCampaignUseCase.execute(dto);
   }
 }
