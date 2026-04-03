@@ -8,12 +8,13 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor.js
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
-  const allowedOrigins = (
-    process.env['FRONTEND_URL'] ??
-    'http://localhost:3000,https://wherads-app.vercel.app'
-  )
+  const envOrigins = (process.env['FRONTEND_URL'] ?? 'http://localhost:3000')
     .split(',')
-    .map((o) => o.trim());
+    .map((o) => o.trim().replace(/\/+$/, ''));
+
+  const allowedOrigins = [
+    ...new Set([...envOrigins, 'https://wherads-app.vercel.app']),
+  ];
 
   app.enableCors({
     origin: allowedOrigins,
