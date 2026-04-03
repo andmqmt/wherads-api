@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './config/env.validation.js';
@@ -10,6 +11,11 @@ import { PrismaModule } from './prisma/prisma.module.js';
     ConfigModule.forRoot({
       isGlobal: true,
       validate,
+    }),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 30000,
+      max: 100,
     }),
     PrismaModule,
     AuthModule,
