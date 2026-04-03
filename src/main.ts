@@ -9,7 +9,8 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   const allowedOrigins = (
-    process.env['FRONTEND_URL'] ?? 'http://localhost:3000'
+    process.env['FRONTEND_URL'] ??
+    'http://localhost:3000,https://wherads-app.vercel.app'
   )
     .split(',')
     .map((o) => o.trim());
