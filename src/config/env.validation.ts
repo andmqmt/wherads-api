@@ -16,6 +16,10 @@ class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
+  FRONTEND_URL?: string;
+
+  @IsString()
+  @IsOptional()
   GEMINI_API_KEY?: string;
 }
 
