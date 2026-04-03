@@ -1,10 +1,16 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GeminiService {
   private client: GoogleGenerativeAI | null = null;
+  private readonly models = [
+    'gemini-2.5-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-2.0-flash',
+    'gemini-flash-latest',
+  ];
 
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.get<string>('GEMINI_API_KEY');
@@ -19,14 +25,23 @@ export class GeminiService {
 
   async generateText(prompt: string): Promise<string> {
     if (!this.client) {
-      throw new Error('Gemini API key not configured');
+      throw new ServiceUnavailableException('Gemini API key not configured');
     }
 
-    const model = this.client.getGenerativeModel({
-      model: 'gemini-2.0-flash',
-    });
-    const result = await model.generateContent(prompt);
+    let lastError = '';
+    for (const modelName of this.models) {
+      try {
+        const model = this.client.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (error: unknown) {
+        lastError = error instanceof Error ? error.message : String(error);
+        continue;
+      }
+    }
 
-    return result.response.text();
+    throw new ServiceUnavailableException(
+      `All AI models failed. Last error: ${lastError.slice(0, 200)}`,
+    );
   }
 }

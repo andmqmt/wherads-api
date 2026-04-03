@@ -8,8 +8,10 @@ import {
 import { JwtAuthGuard } from '../../../auth/presentation/guards/jwt-auth.guard.js';
 import { GenerateDescriptionDto } from '../../application/dtos/generate-description.dto.js';
 import { GenerateInsightsDto } from '../../application/dtos/generate-insights.dto.js';
+import { GenerateSummaryDto } from '../../application/dtos/generate-summary.dto.js';
 import { GenerateDescriptionUseCase } from '../../application/use-cases/generate-description.use-case.js';
 import { GenerateInsightsUseCase } from '../../application/use-cases/generate-insights.use-case.js';
+import { GenerateSummaryUseCase } from '../../application/use-cases/generate-summary.use-case.js';
 import { GeminiService } from '../../infrastructure/services/gemini.service.js';
 
 @ApiTags('AI')
@@ -20,6 +22,7 @@ export class AiController {
   constructor(
     private readonly generateInsightsUseCase: GenerateInsightsUseCase,
     private readonly generateDescriptionUseCase: GenerateDescriptionUseCase,
+    private readonly generateSummaryUseCase: GenerateSummaryUseCase,
     private readonly geminiService: GeminiService,
   ) {}
 
@@ -44,5 +47,13 @@ export class AiController {
   @ApiResponse({ status: 503, description: 'Serviço de IA indisponível' })
   async generateDescription(@Body() dto: GenerateDescriptionDto) {
     return this.generateDescriptionUseCase.execute(dto);
+  }
+
+  @Post('summary')
+  @ApiOperation({ summary: 'Gerar resumo AI do portfólio de campanhas' })
+  @ApiResponse({ status: 200, description: 'Resumo gerado com sucesso' })
+  @ApiResponse({ status: 503, description: 'Serviço de IA indisponível' })
+  async generateSummary(@Body() dto: GenerateSummaryDto) {
+    return this.generateSummaryUseCase.execute(dto);
   }
 }
