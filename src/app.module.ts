@@ -2,6 +2,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './config/env.validation.js';
+import { AiModule } from './modules/ai/ai.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { CampaignModule } from './modules/campaign/campaign.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
@@ -20,6 +21,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
     PrismaModule,
     AuthModule,
     CampaignModule,
+    AiModule,
   ],
 })
 export class AppModule {}
