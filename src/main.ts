@@ -8,24 +8,17 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor.js
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    origin: (
-      origin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void,
-    ) => {
-      const allowedOrigins = (
-        process.env['FRONTEND_URL'] ?? 'http://localhost:3000'
-      )
-        .split(',')
-        .map((o) => o.trim());
+  const allowedOrigins = (
+    process.env['FRONTEND_URL'] ?? 'http://localhost:3000'
+  )
+    .split(',')
+    .map((o) => o.trim());
 
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`Origin ${origin} not allowed by CORS`));
-      }
-    },
+  app.enableCors({
+    origin: allowedOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.useGlobalPipes(
