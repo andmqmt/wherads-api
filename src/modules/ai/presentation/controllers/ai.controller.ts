@@ -9,10 +9,12 @@ import { JwtAuthGuard } from '../../../auth/presentation/guards/jwt-auth.guard.j
 import { DesignCampaignDto } from '../../application/dtos/design-campaign.dto.js';
 import { GenerateDescriptionDto } from '../../application/dtos/generate-description.dto.js';
 import { GenerateInsightsDto } from '../../application/dtos/generate-insights.dto.js';
+import { GenerateKpisDto } from '../../application/dtos/generate-kpis.dto.js';
 import { GenerateSummaryDto } from '../../application/dtos/generate-summary.dto.js';
 import { DesignCampaignUseCase } from '../../application/use-cases/design-campaign.use-case.js';
 import { GenerateDescriptionUseCase } from '../../application/use-cases/generate-description.use-case.js';
 import { GenerateInsightsUseCase } from '../../application/use-cases/generate-insights.use-case.js';
+import { GenerateKpisUseCase } from '../../application/use-cases/generate-kpis.use-case.js';
 import { GenerateSummaryUseCase } from '../../application/use-cases/generate-summary.use-case.js';
 import { GeminiService } from '../../infrastructure/services/gemini.service.js';
 
@@ -26,6 +28,7 @@ export class AiController {
     private readonly generateDescriptionUseCase: GenerateDescriptionUseCase,
     private readonly generateSummaryUseCase: GenerateSummaryUseCase,
     private readonly designCampaignUseCase: DesignCampaignUseCase,
+    private readonly generateKpisUseCase: GenerateKpisUseCase,
     private readonly geminiService: GeminiService,
   ) {}
 
@@ -66,5 +69,13 @@ export class AiController {
   @ApiResponse({ status: 503, description: 'Serviço de IA indisponível' })
   async designCampaign(@Body() dto: DesignCampaignDto) {
     return this.designCampaignUseCase.execute(dto);
+  }
+
+  @Post('kpis')
+  @ApiOperation({ summary: 'Gerar KPIs e projeções com IA' })
+  @ApiResponse({ status: 200, description: 'KPIs gerados com sucesso' })
+  @ApiResponse({ status: 503, description: 'Serviço de IA indisponível' })
+  async generateKpis(@Body() dto: GenerateKpisDto) {
+    return this.generateKpisUseCase.execute(dto);
   }
 }
