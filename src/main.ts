@@ -6,7 +6,14 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor.js';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env['NODE_ENV'] === 'production'
+        ? ['error', 'warn', 'log']
+        : ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
+
+  app.enableShutdownHooks();
 
   const envOrigins = (process.env['FRONTEND_URL'] ?? 'http://localhost:3000')
     .split(',')
@@ -45,6 +52,6 @@ async function bootstrap(): Promise<void> {
   SwaggerModule.setup('api/docs', app, document);
 
   const port = process.env['PORT'] ?? 3001;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 }
 void bootstrap();
