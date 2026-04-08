@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
@@ -15,19 +15,53 @@ async function bootstrap(): Promise<void> {
 
   app.enableShutdownHooks();
 
+  const corsLogger = new Logger('CORS');
+
   const envOrigins = (process.env['FRONTEND_URL'] ?? 'http://localhost:3000')
     .split(',')
-    .map((o) => o.trim().replace(/\/+$/, ''));
+    .map((o) =>
+      o
+        .trim()
+        .replace(/\/+$/, '')
+        .replace(/^["']|["']$/g, ''),
+    )
+    .filter(Boolean);
 
   const allowedOrigins = [
     ...new Set([...envOrigins, 'https://wherads-app.vercel.app']),
   ];
 
+  corsLogger.log(`Allowed origins: ${JSON.stringify(allowedOrigins)}`);
+
   app.enableCors({
-    origin: allowedOrigins,
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/wherads-app(-[\w-]+)?\.vercel\.app$/.test(origin);
+
+      if (!isAllowed) {
+        corsLogger.warn(`Blocked request from origin: ${origin}`);
+      }
+
+      callback(null, isAllowed);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'X-Requested-With',
+    ],
+    maxAge: 86400,
   });
 
   app.useGlobalPipes(
